@@ -50,7 +50,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
           //符合 生成验证码 使用百宝箱hutool
         String code = RandomUtil.randomNumbers(6);
 
-
         //保存到session
         // session.setAttribute("code",code);
         //此处重构代码 更改原来的保存code到session中 现在用redis来存储
@@ -83,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return Result.fail("验证码错误 或者验证码已经过期");
         }
 
-        //代码重构 从redis中获取user对象
+        //从数据库取出用户对象
         User user = query().eq("phone",loginForm.getPhone()).one();
 
         //判断用户是否存在
