@@ -67,7 +67,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
 
         SimpleRedisLock lock = new SimpleRedisLock("order:"+userId,stringRedisTemplate);
 
-        boolean isLock = lock.tryLock(1200);
+        boolean isLock = lock.tryLock(300);
 
         //判断是否获得锁
         if(!isLock){
