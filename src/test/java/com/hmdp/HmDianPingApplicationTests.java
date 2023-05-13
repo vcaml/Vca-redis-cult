@@ -10,11 +10,18 @@ import com.hmdp.utils.RedisIdWorker;
 import com.hmdp.utils.UserHolder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static com.hmdp.utils.RedisConstants.USER_SIGN_KEY;
 
 @SpringBootTest
 class HmDianPingApplicationTests {
@@ -24,6 +31,9 @@ class HmDianPingApplicationTests {
 
     @Resource
     IUserService userService;
+
+    @Resource
+    RedisTemplate redisTemplate;
 
     private ExecutorService es = Executors.newFixedThreadPool(500);
 
@@ -67,4 +77,16 @@ class HmDianPingApplicationTests {
        System.out.println("result:"+result.getData());
        UserHolder.removeUser();
    }
+
+   @Test
+    void userSignSumCount(){
+       String key ="sign:1010:202305";
+       LocalDateTime now = LocalDateTime.now();
+       System.out.println("sum:"+bitCount(key));
+
+   }
+
+    public long bitCount(String key) {
+        return (long)redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
+    }
 }
