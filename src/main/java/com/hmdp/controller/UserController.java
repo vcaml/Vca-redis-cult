@@ -39,6 +39,7 @@ public class UserController {
      */
     @PostMapping("code")
     public Result sendCode(@RequestParam("phone") String phone, HttpSession session) {
+        log.debug(" 0081 收到验证码发送请求 手机号: {}",phone);
         // 发送短信验证码并保存验证码
         return userService.sendCode(phone,session);
     }
@@ -51,6 +52,7 @@ public class UserController {
     public Result login(@RequestBody LoginFormDTO loginForm, HttpSession session){
         // 实现登录功能
         //这里注意前端传json参数过来 后端要用@RequestBody来接收 并自动注入到 LoginFormDTO 对象
+        log.debug(" 0081 收到前端登录请求 {}",loginForm);
         return userService.login(loginForm,session);
     }
 
