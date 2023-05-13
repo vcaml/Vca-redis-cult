@@ -20,7 +20,7 @@ import java.util.List;
  * 前端控制器
  * </p>
  *
- * @author 虎哥
+ * @author larszhang
  * @since 2021-12-22
  */
 @RestController
@@ -80,4 +80,12 @@ public class BlogController {
         });
         return Result.ok(records);
     }
+
+    @GetMapping("/{id}")
+    public Result queryBlogById(@PathVariable("id") Long id){
+        return blogService.queryBlogById(id);
+
+    }
+
+
 }
