@@ -3,7 +3,6 @@ package com.hmdp;
 import cn.hutool.json.JSONUtil;
 import com.hmdp.dto.Result;
 import com.hmdp.dto.UserDTO;
-import com.hmdp.entity.User;
 import com.hmdp.entity.Voucher;
 import com.hmdp.service.IUserService;
 import com.hmdp.utils.RedisIdWorker;
@@ -16,8 +15,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,6 +31,9 @@ class HmDianPingApplicationTests {
 
     @Resource
     RedisTemplate redisTemplate;
+
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
 
     private ExecutorService es = Executors.newFixedThreadPool(500);
 
@@ -88,5 +88,25 @@ class HmDianPingApplicationTests {
 
     public long bitCount(String key) {
         return (long)redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
+    }
+
+
+
+    //测试一百万数据的UV统计
+    @Test
+    void testHyperLogLog(){
+        String[] values = new String[1000];
+        int j = 0;
+        for (int i = 0; i < 1000000; i++) {
+            j = i % 1000;
+            values[j] = "user_" + i;
+            if(j==999){
+            stringRedisTemplate.opsForHyperLogLog().add("vcamlTest",values);
+            }
+        }
+        Long vcamlTest = stringRedisTemplate.opsForHyperLogLog().size("vcamlTest");
+
+        System.out.println("统计结果为" + vcamlTest);
+
     }
 }
