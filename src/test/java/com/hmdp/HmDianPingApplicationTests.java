@@ -1,8 +1,13 @@
 package com.hmdp;
 
 import cn.hutool.json.JSONUtil;
+import com.hmdp.dto.Result;
+import com.hmdp.dto.UserDTO;
+import com.hmdp.entity.User;
 import com.hmdp.entity.Voucher;
+import com.hmdp.service.IUserService;
 import com.hmdp.utils.RedisIdWorker;
+import com.hmdp.utils.UserHolder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,6 +21,9 @@ class HmDianPingApplicationTests {
 
     @Resource
     RedisIdWorker redisIdWorker;
+
+    @Resource
+    IUserService userService;
 
     private ExecutorService es = Executors.newFixedThreadPool(500);
 
@@ -50,5 +58,13 @@ class HmDianPingApplicationTests {
         System.out.println(JSONUtil.toJsonStr(voucher));
     }
 
-
+   @Test
+    void userSignCount(){
+       UserDTO user = new UserDTO();
+       user.setId(1010l);
+       UserHolder.saveUser(user);
+       Result result = userService.signCount();
+       System.out.println("result:"+result.getData());
+       UserHolder.removeUser();
+   }
 }
