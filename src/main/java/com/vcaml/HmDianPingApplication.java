@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @EnableAspectJAutoProxy(exposeProxy = true)
-@MapperScan("com.hmdp.mapper")
+@MapperScan("com.vcaml.mapper")
 @SpringBootApplication
 public class HmDianPingApplication {
 
